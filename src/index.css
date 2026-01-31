@@ -1,22 +1,36 @@
 :root {
-  --bg: #0b0d10;
-  --panel: #11151b;
-  --card: #141a22;
-  --text: #e8eef7;
-  --muted: #9fb0c3;
-  --line: rgba(255,255,255,0.08);
-  --accent: #7aa7ff;
-  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+  /* ===== Base ===== */
+  --bg: #f6f8fc;
+  --panel: #f1f5fb;
+  --card: #ffffff;
+
+  /* ===== Text ===== */
+  --text: #0f172a;   /* slate-900 */
+  --muted: #64748b;  /* slate-500 */
+
+  /* ===== Borders / Shadows ===== */
+  --line: rgba(15, 23, 42, 0.10);
+  --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+
+  /* ===== Brand ===== */
+  --accent: #2563eb; /* blue-600 */
+
+  /* ===== Semantic ===== */
+  --success: #16a34a;
+  --warning: #f59e0b;
+  --danger: #ef4444;
 }
 
 * { box-sizing: border-box; }
 html, body { height: 100%; }
+
 body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial;
-  background: radial-gradient(1200px 600px at 20% 0%, rgba(122,167,255,0.18), transparent 60%),
-              radial-gradient(900px 500px at 80% 10%, rgba(154,255,210,0.08), transparent 55%),
-              var(--bg);
+  background:
+    radial-gradient(900px 420px at 20% 0%, rgba(37, 99, 235, 0.10), transparent 55%),
+    radial-gradient(700px 360px at 85% 10%, rgba(34, 197, 94, 0.06), transparent 55%),
+    var(--bg);
   color: var(--text);
 }
 
@@ -26,8 +40,9 @@ a { color: inherit; }
 .pageTitle { margin: 0 0 12px; font-size: 22px; }
 .muted { color: var(--muted); margin: 0; line-height: 1.6; }
 
+/* ===== Card ===== */
 .card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 30%), var(--card);
+  background: linear-gradient(180deg, rgba(15,23,42,0.02), transparent 30%), var(--card);
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 14px;
@@ -35,43 +50,60 @@ a { color: inherit; }
 }
 .cardTitle { margin: 0 0 8px; font-size: 16px; }
 
+/* ===== Lists ===== */
 .list { margin: 0; padding-left: 18px; color: var(--muted); line-height: 1.7; }
 
+/* ===== Buttons ===== */
 .btn {
-  background: rgba(255,255,255,0.06);
+  background: rgba(15,23,42,0.04);
   border: 1px solid var(--line);
   color: var(--text);
   padding: 10px 12px;
   border-radius: 12px;
   cursor: pointer;
-  transition: transform 0.08s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.08s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.14); }
+.btn:hover {
+  background: rgba(15,23,42,0.06);
+  border-color: rgba(15,23,42,0.18);
+  box-shadow: 0 4px 12px rgba(15,23,42,0.10);
+}
 .btn:active { transform: translateY(1px); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
 
 .btnPrimary {
-  background: rgba(122,167,255,0.18);
-  border-color: rgba(122,167,255,0.35);
+  background: rgba(37, 99, 235, 0.12);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: #1e3a8a;
 }
-.btnPrimary:hover { background: rgba(122,167,255,0.24); }
+.btnPrimary:hover {
+  background: rgba(37, 99, 235, 0.18);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+}
 
+/* ===== Inputs ===== */
 .input, .select, .textarea {
   width: 100%;
   padding: 10px 12px;
   border-radius: 12px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,0.04);
+  background: #ffffff;
   color: var(--text);
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input:focus, .select:focus, .textarea:focus {
+  border-color: rgba(37, 99, 235, 0.5);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 .textarea { min-height: 90px; resize: vertical; }
 
+/* ===== Header / Nav ===== */
 .header {
   position: sticky;
   top: 0;
   z-index: 10;
-  background: rgba(11,13,16,0.7);
+  background: rgba(246,248,252,0.75);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
 }
@@ -92,11 +124,19 @@ a { color: inherit; }
   border-radius: 12px;
   border: 1px solid transparent;
   color: var(--muted);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
-.navLink:hover { color: var(--text); background: rgba(255,255,255,0.05); }
-.navLink.active { color: var(--text); background: rgba(255,255,255,0.06); border-color: var(--line); }
+.navLink:hover {
+  color: var(--text);
+  background: rgba(15,23,42,0.04);
+}
+.navLink.active {
+  color: var(--text);
+  background: rgba(37, 99, 235, 0.10);
+  border-color: rgba(37, 99, 235, 0.35);
+}
 
-/* ===== 홈 화면용 고도화 UI ===== */
+/* ===== Layout Helpers ===== */
 .stack { display: grid; gap: 12px; }
 .stackLg { display: grid; gap: 16px; }
 
@@ -111,52 +151,63 @@ a { color: inherit; }
   .grid3 { grid-template-columns: 1fr 1fr 1fr; }
 }
 
+/* ===== Hero ===== */
 .hero {
   padding: 18px;
   border-radius: 16px;
   border: 1px solid var(--line);
   background:
-    radial-gradient(800px 300px at 10% 0%, rgba(122,167,255,0.18), transparent 60%),
-    radial-gradient(700px 260px at 90% 20%, rgba(154,255,210,0.10), transparent 55%),
-    rgba(255,255,255,0.03);
+    radial-gradient(700px 260px at 10% 0%, rgba(37, 99, 235, 0.12), transparent 60%),
+    radial-gradient(600px 220px at 90% 20%, rgba(34, 197, 94, 0.08), transparent 55%),
+    #ffffff;
   box-shadow: var(--shadow);
 }
 
 .heroTitle { margin: 0; font-size: 28px; letter-spacing: -0.2px; }
 .heroSub { margin: 8px 0 0; color: var(--muted); line-height: 1.6; }
 
+/* ===== Badges ===== */
 .badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
 .badge {
   font-size: 12px;
   color: var(--muted);
   border: 1px solid var(--line);
-  background: rgba(255,255,255,0.03);
+  background: rgba(15,23,42,0.03);
   padding: 6px 10px;
   border-radius: 999px;
 }
 
+/* ===== Stats ===== */
 .statGrid { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
 @media (min-width: 860px) { .statGrid { grid-template-columns: 1fr 1fr 1fr 1fr; } }
 
-.statCard { border: 1px solid var(--line); background: rgba(255,255,255,0.03); border-radius: 14px; padding: 12px; }
+.statCard {
+  border: 1px solid var(--line);
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: var(--shadow);
+}
 .statLabel { color: var(--muted); font-size: 12px; }
 .statValue { font-size: 22px; font-weight: 900; margin-top: 4px; }
 .statHint { color: var(--muted); font-size: 12px; margin-top: 4px; }
 
+/* ===== Keyboard Hint ===== */
 .kbd {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
   font-size: 12px;
   border: 1px solid var(--line);
   padding: 2px 6px;
   border-radius: 8px;
-  background: rgba(0,0,0,0.2);
+  background: rgba(15,23,42,0.04);
   color: var(--muted);
 }
 
+/* ===== Footer ===== */
 .footer {
   margin-top: 22px;
   border-top: 1px solid var(--line);
-  background: rgba(11,13,16,0.35);
+  background: rgba(246,248,252,0.6);
 }
 
 .footerInner {
@@ -181,22 +232,37 @@ a { color: inherit; }
 .footer a {
   color: var(--text);
   text-decoration: none;
-  border-bottom: 1px dashed rgba(255,255,255,0.25);
+  border-bottom: 1px dashed rgba(15,23,42,0.25);
 }
 .footer a:hover {
-  border-bottom-color: rgba(255,255,255,0.5);
+  border-bottom-color: rgba(15,23,42,0.5);
 }
-.cardFlat {
-  box-shadow: none;
-}
+
+/* ===== Chips ===== */
+.cardFlat { box-shadow: none; }
 
 .chipRow { display:flex; flex-wrap:wrap; gap:8px; }
-.chip { padding:8px 10px; border-radius:999px; border:1px solid var(--line);
-  background:rgba(255,255,255,0.04); color:var(--muted); cursor:pointer; }
-.chip:hover { background:rgba(255,255,255,0.07); color:var(--text); }
-.chipActive { background:rgba(122,167,255,0.18); border-color:rgba(122,167,255,0.35); color:var(--text); }
+.chip {
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background: rgba(15,23,42,0.04);
+  color: var(--muted);
+  cursor:pointer;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+.chip:hover {
+  background: rgba(15,23,42,0.08);
+  color: var(--text);
+  box-shadow: 0 4px 10px rgba(15,23,42,0.10);
+}
+.chipActive {
+  background: rgba(37, 99, 235, 0.14);
+  border-color: rgba(37, 99, 235, 0.35);
+  color: var(--text);
+}
 
-/* ===== QuestionList 카드형 UI ===== */
+/* ===== Question List ===== */
 .qListWrap {
   display: flex;
   flex-direction: column;
@@ -234,8 +300,9 @@ a { color: inherit; }
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: rgba(255,255,255,0.03);
+  background: #ffffff;
   align-items: stretch;
+  box-shadow: var(--shadow);
 }
 
 .qItemLeft {
@@ -253,7 +320,7 @@ a { color: inherit; }
   padding: 6px 10px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,0.04);
+  background: rgba(15,23,42,0.04);
   color: var(--text);
   font-size: 12px;
   font-weight: 800;
@@ -266,8 +333,8 @@ a { color: inherit; }
   justify-content: center;
   padding: 4px 8px;
   border-radius: 999px;
-  border: 1px solid rgba(122,167,255,0.35);
-  background: rgba(122,167,255,0.14);
+  border: 1px solid rgba(37, 99, 235, 0.35);
+  background: rgba(37, 99, 235, 0.14);
   color: var(--text);
   font-size: 12px;
   font-weight: 900;
@@ -308,12 +375,14 @@ a { color: inherit; }
   padding: 8px 10px;
   border-radius: 12px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,0.04);
+  background: rgba(15,23,42,0.04);
   color: var(--text);
   cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 .qBtn:hover {
-  background: rgba(255,255,255,0.07);
+  background: rgba(15,23,42,0.08);
+  box-shadow: 0 4px 10px rgba(15,23,42,0.10);
 }
 
 .qEmpty {
@@ -322,11 +391,12 @@ a { color: inherit; }
   border: 1px dashed var(--line);
   border-radius: 14px;
 }
+
 /* ===== Modal ===== */
 .modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(15,23,42,0.35);
   backdrop-filter: blur(6px);
   z-index: 50;
   display: flex;
@@ -341,7 +411,7 @@ a { color: inherit; }
   overflow: auto;
   border-radius: 16px;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 30%), var(--card);
+  background: #ffffff;
   box-shadow: var(--shadow);
 }
 
@@ -368,8 +438,165 @@ a { color: inherit; }
   padding: 8px 10px;
   border-radius: 12px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,0.04);
+  background: rgba(15,23,42,0.04);
   color: var(--text);
   cursor: pointer;
 }
-.modalClose:hover { background: rgba(255,255,255,0.07); }
+.modalClose:hover {
+  background: rgba(15,23,42,0.08);
+}
+
+.headerRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+
+html[data-theme="dark"] {
+  --bg: #0b0d10;
+  --panel: #11151b;
+  --card: #141a22;
+
+  --text: #e8eef7;
+  --muted: #9fb0c3;
+
+  --line: rgba(255,255,255,0.10);
+  --shadow: 0 10px 30px rgba(0,0,0,0.35);
+
+  --accent: #7aa7ff;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+/* 다크 모드에서 body 배경도 다크로 */
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(1200px 600px at 20% 0%, rgba(122,167,255,0.18), transparent 60%),
+    radial-gradient(900px 500px at 80% 10%, rgba(154,255,210,0.08), transparent 55%),
+    var(--bg);
+  color: var(--text);
+}
+
+/* 레이아웃 다크/라이트 토글 버튼 */
+.themeToggle {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(15,23,42,0.04);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.themeToggle:hover {
+  background: rgba(15,23,42,0.08);
+  border-color: rgba(15,23,42,0.18);
+  box-shadow: 0 4px 10px rgba(15,23,42,0.10);
+}
+
+/* ===== Dark mode overrides (라이트 규칙 유지, 다크만 덮어쓰기) ===== */
+html[data-theme="dark"] .header {
+  background: rgba(11,13,16,0.70);
+  border-bottom-color: var(--line);
+}
+
+html[data-theme="dark"] .navLink:hover {
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .navLink.active {
+  background: rgba(122,167,255,0.14);
+  border-color: rgba(122,167,255,0.35);
+  color: var(--text);
+}
+
+/* 흰색 하드코딩 제거: 입력/셀렉트/텍스트에리어 */
+html[data-theme="dark"] .input,
+html[data-theme="dark"] .select,
+html[data-theme="dark"] .textarea {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--line);
+  color: var(--text);
+}
+
+/* 흰색 하드코딩 제거: hero, statCard, qItem, modal */
+html[data-theme="dark"] .hero {
+  background:
+    radial-gradient(800px 300px at 10% 0%, rgba(122,167,255,0.18), transparent 60%),
+    radial-gradient(700px 260px at 90% 20%, rgba(154,255,210,0.10), transparent 55%),
+    rgba(255,255,255,0.03);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .statCard {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .qItem {
+  background: rgba(255,255,255,0.03);
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .modal {
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent 30%), var(--card);
+  border-color: var(--line);
+}
+
+/* 라이트 RGBA(15,23,42,...) 하드코딩 제거: 버튼류/칩/토글 */
+html[data-theme="dark"] .btn,
+html[data-theme="dark"] .chip,
+html[data-theme="dark"] .qBtn,
+html[data-theme="dark"] .themeToggle,
+html[data-theme="dark"] .modalClose {
+  background: rgba(255,255,255,0.06);
+  border-color: var(--line);
+  color: var(--text);
+  box-shadow: none;
+}
+
+html[data-theme="dark"] .btn:hover,
+html[data-theme="dark"] .chip:hover,
+html[data-theme="dark"] .qBtn:hover,
+html[data-theme="dark"] .themeToggle:hover,
+html[data-theme="dark"] .modalClose:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.16);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* primary 버튼은 다크에서 더 또렷하게 */
+html[data-theme="dark"] .btnPrimary {
+  background: rgba(122,167,255,0.18);
+  border-color: rgba(122,167,255,0.35);
+  color: var(--text);
+}
+
+html[data-theme="dark"] .btnPrimary:hover {
+  background: rgba(122,167,255,0.24);
+}
+/* Dark mode 푸터 */
+html[data-theme="dark"] .footer {
+  background: rgba(11, 13, 16, 0.75);
+  border-top-color: var(--line);
+}
+
+html[data-theme="dark"] .footerInner {
+  color: var(--muted);
+}
+
+html[data-theme="dark"] .footer a {
+  color: var(--text);
+  border-bottom-color: rgba(255,255,255,0.25);
+}
+
+html[data-theme="dark"] .footer a:hover {
+  border-bottom-color: rgba(255,255,255,0.5);
+}
