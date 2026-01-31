@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function GuidePage() {
   const sampleJson = `{
   "schemaVersion": 2,
@@ -77,6 +79,79 @@ export default function GuidePage() {
 
 반드시 위 형식을 지켜서 JSON만 출력.`;
 
+  function CodeBlock({
+    title,
+    text,
+    defaultOpen = false,
+  }: {
+    title: string;
+    text: string;
+    defaultOpen?: boolean;
+  }) {
+    const [open, setOpen] = useState(defaultOpen);
+    const [copied, setCopied] = useState(false);
+
+    async function copy() {
+      try {
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        window.setTimeout(() => setCopied(false), 1200);
+      } catch {
+        // clipboard 권한 실패 시 fallback
+        try {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.left = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 1200);
+        } catch {
+          alert("복사 실패");
+        }
+      }
+    }
+
+    return (
+      <div className="stack">
+        <div className="rowBetween">
+          <div className="cardTitle" style={{ margin: 0 }}>
+            {title}
+          </div>
+          <div className="row">
+            <button className="btn" onClick={copy}>
+              {copied ? "복사됨" : "복사"}
+            </button>
+            <button className="btn" onClick={() => setOpen((v) => !v)}>
+              {open ? "접기" : "펼치기"}
+            </button>
+          </div>
+        </div>
+
+        {open && (
+          <pre
+            style={{
+              margin: 0,
+              padding: 12,
+              borderRadius: 12,
+              border: "1px solid var(--line)",
+              background: "rgba(255,255,255,0.03)",
+              overflow: "auto",
+              fontSize: 12,
+              lineHeight: 1.6,
+              whiteSpace: "pre-wrap",
+            }}
+          >
+            {text}
+          </pre>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="stackLg">
       <div className="card">
@@ -100,44 +175,52 @@ export default function GuidePage() {
       <div className="card">
         <div className="cardTitle">JSON 파일 양식 명세</div>
         <div className="stack">
-          <div className="muted">
-            ExamMaker는 아래 구조의 JSON 양식을 따름
-          </div>
+          <div className="muted">ExamMaker는 아래 구조의 JSON 양식을 따름</div>
 
           <ul className="list">
-            <li><b>schemaVersion</b>: 현재 2 고정</li>
-            <li><b>questions</b>: 문제 배열</li>
-            <li><b>blueprints / attempts / results</b>: 시험 기록용(예제는 빈 배열로 둬도 됨)</li>
+            <li>
+              <b>schemaVersion</b>: 현재 2 고정
+            </li>
+            <li>
+              <b>questions</b>: 문제 배열
+            </li>
+            <li>
+              <b>blueprints / attempts / results</b>: 시험 기록용(예제는 빈 배열로 둬도 됨)
+            </li>
           </ul>
 
           <div className="cardTitle">Question 객체 필드</div>
           <ul className="list">
-            <li><b>id</b>: 고유 문자열 (예: q_001)</li>
-            <li><b>subject</b>: 과목명 문자열</li>
-            <li><b>difficulty</b>: 1~5 정수</li>
-            <li><b>prompt</b>: 문제 지문</li>
-            <li><b>choices</b>: 보기 4개 문자열 배열</li>
-            <li><b>answerIndex</b>: 정답 보기 인덱스(0~3)</li>
-            <li><b>explanation</b>: 짧은 해설(1~2문장)</li>
-            <li><b>stats.wrongCount</b>: 오답 누적 횟수</li>
-            <li><b>createdAt / updatedAt</b>: ISO 문자열(없어도 앱이 크게 깨지진 않지만 예제는 넣는 것을 권장)</li>
+            <li>
+              <b>id</b>: 고유 문자열 (예: q_001)
+            </li>
+            <li>
+              <b>subject</b>: 과목명 문자열
+            </li>
+            <li>
+              <b>difficulty</b>: 1~5 정수
+            </li>
+            <li>
+              <b>prompt</b>: 문제 지문
+            </li>
+            <li>
+              <b>choices</b>: 보기 4개 문자열 배열
+            </li>
+            <li>
+              <b>answerIndex</b>: 정답 보기 인덱스(0~3)
+            </li>
+            <li>
+              <b>explanation</b>: 짧은 해설(1~2문장)
+            </li>
+            <li>
+              <b>stats.wrongCount</b>: 오답 누적 횟수
+            </li>
+            <li>
+              <b>createdAt / updatedAt</b>: ISO 문자열(없어도 앱이 크게 깨지진 않지만 예제는 넣는 것을 권장)
+            </li>
           </ul>
 
-          <div className="cardTitle">예시 JSON</div>
-          <pre
-            style={{
-              margin: 0,
-              padding: 12,
-              borderRadius: 12,
-              border: "1px solid var(--line)",
-              background: "rgba(255,255,255,0.03)",
-              overflow: "auto",
-              fontSize: 12,
-              lineHeight: 1.6,
-            }}
-          >
-            {sampleJson}
-          </pre>
+          <CodeBlock title="예시 JSON" text={sampleJson} defaultOpen={false} />
         </div>
       </div>
 
@@ -147,24 +230,11 @@ export default function GuidePage() {
           아래 프롬프트를 AI에 그대로 붙여넣으면 ExamMaker에서 불러올 수 있는 JSON을 출력하도록 유도할 수 있음
         </p>
 
-        <div className="cardTitle">예시 프롬프트</div>
-        <pre
-          style={{
-            margin: 0,
-            padding: 12,
-            borderRadius: 12,
-            border: "1px solid var(--line)",
-            background: "rgba(255,255,255,0.03)",
-            overflow: "auto",
-            fontSize: 12,
-            lineHeight: 1.6,
-            whiteSpace: "pre-wrap",
-          }}
-        >
-          {aiPrompt}
-        </pre>
+        <CodeBlock title="예시 프롬프트" text={aiPrompt} defaultOpen={false} />
 
-        <div className="cardTitle" style={{ marginTop: 12 }}>주의</div>
+        <div className="cardTitle" style={{ marginTop: 12 }}>
+          주의
+        </div>
         <ul className="list">
           <li>실제 기출 문장을 그대로 복사하지 않도록 조건을 넣는 게 안전함</li>
           <li>AI가 JSON 외 텍스트를 섞어 출력하면 불러오기에 실패할 수 있음</li>

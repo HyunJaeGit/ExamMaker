@@ -20,7 +20,7 @@ export default function SamplesPage({ setApp }: Props) {
     setLoading(true);
     try {
       // HashRouter 사용 중이라도 public 리소스는 루트로 접근됨
-      const res = await fetch(`/${encodeURIComponent(SAMPLE.fileName)}`);
+      const res = await fetch(`${import.meta.env.BASE_URL}${encodeURIComponent(SAMPLE.fileName)}`);
       if (!res.ok) throw new Error("fetch failed");
       const data = (await res.json()) as AppData;
       setApp(data);
@@ -55,7 +55,7 @@ export default function SamplesPage({ setApp }: Props) {
           </div>
 
           <div className="row">
-            <a href={`/${encodeURIComponent(SAMPLE.fileName)}`} download>
+            <a href={`${import.meta.env.BASE_URL}${encodeURIComponent(SAMPLE.fileName)}`} download>
               <button className="btn">다운로드</button>
             </a>
 
