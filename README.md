@@ -1,6 +1,6 @@
 # ExamMaker `v0.1.0-beta`  
-> **https://hyunjaegit.github.io/ExamMaker/  
-> 핵심 학습 기능을 담은 MVP 배포 버전입니다.**
+> [▶ 플레이 – ExamMaker 바로 시작](https://hyunjaegit.github.io/ExamMaker/)  
+> 핵심 학습 기능을 담은 MVP 배포 버전입니다.
 
 ExamMaker는 사용자가 직접 객관식 4지선다 문제를 생성하고,  
 선택한 문제로 모의시험을 구성하며,  
