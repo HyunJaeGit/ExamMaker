@@ -1,73 +1,61 @@
-# React + TypeScript + Vite
+# ExamMaker `v0.1.0-beta`  
+> **핵심 학습 기능을 담은 MVP 배포 버전입니다.**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ExamMaker는 사용자가 직접 객관식 4지선다 문제를 생성하고,  
+선택한 문제로 모의시험을 구성하며,  
+과목별 결과와 오답 노트를 통해 반복 학습할 수 있는 웹 기반 학습 플랫폼입니다.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 주요 기능
 
-## React Compiler
+- **문제 창고**
+    - 과목 / 난이도 기반 문제 생성 및 수정
+    - 4지선다 객관식 구조 지원
+    - JSON 파일 내보내기 / 불러오기
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **시험 설정**
+    - 출제할 문제 선택
+    - 문항 수 지정
+    - 문제 및 보기 랜덤 섞기
 
-## Expanding the ESLint configuration
+- **시험 진행**
+    - 문항 패널 기반 빠른 이동
+    - 타이머 제공
+    - 실전형 UI
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **결과 분석**
+    - 과목별 정답률 확인
+    - 시험 기록 관리
+    - 오답 횟수 누적
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **오답 노트**
+    - 틀린 문제 자동 분류
+    - 재시험 기반 반복 학습
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 기술 스택
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| 구분 | 기술 |
+|------|------|
+| Frontend | React 18, TypeScript |
+| Build Tool | Vite |
+| Routing | React Router (HashRouter) |
+| Styling | CSS (Custom Design System) |
+| Deployment | GitHub Pages |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 프로젝트 구조
+ExamMaker/ </br>
+├─ src/ </br>
+│ ├─ assets/ # 이미지 및 정적 리소스 </br>
+│ ├─ components/ # 재사용 UI 컴포넌트 </br>
+│ ├─ lib/ # 유틸리티 (파일 IO, 랜덤, ID 생성) </br>
+│ ├─ pages/ # 라우트 단위 페이지    </br>
+│ ├─ types/ # 타입 정의 </br>
+│ └─ main.tsx  
+├─ public/  
+├─ package.json  
+└─ vite.config.ts  
