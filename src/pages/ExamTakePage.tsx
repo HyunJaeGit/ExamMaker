@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { AppData, ExamAttempt, ExamResult } from "../types/appData";
+import type { AppData, ExamResult, ExamAttemptStatus } from "../types/appData";
 import type { Question } from "../types/question";
 
 type Props = {
@@ -54,35 +54,39 @@ export default function ExamTakePage({ app, setApp }: Props) {
 
   if (!current) return <div className="card">문제 데이터가 없음</div>;
 
-  const order = attempt.choiceOrder[current.id] ?? [0, 1, 2, 3];
-  const selectedOriginal = attempt.answers[current.id];
+  // TS null-guard 스냅샷
+  const at = attempt;
+  const cur = current;
 
-  const answeredCount = Object.values(attempt.answers).filter(
-    (v) => v !== null
-  ).length;
+  const order = at.choiceOrder[cur.id] ?? [0, 1, 2, 3];
+  const selectedOriginal = at.answers[cur.id];
+
+  const answeredCount = Object.values(at.answers).filter((v) => v !== null)
+    .length;
 
   function setAnswer(originalIndex: 0 | 1 | 2 | 3) {
     const nextAttempts = app.attempts.map((a) => {
-      if (a.id !== attempt.id) return a;
+      if (a.id !== at.id) return a;
       return {
         ...a,
-        answers: { ...a.answers, [current.id]: originalIndex },
+        answers: { ...a.answers, [cur.id]: originalIndex },
       };
     });
     setApp({ ...app, attempts: nextAttempts });
   }
 
   function submit() {
-    if (attempt.status === "SUBMITTED") return;
+    const submittedStatus: ExamAttemptStatus = "SUBMITTED";
+    if (at.status === "SUBMITTED") return;
 
     const submittedAt = new Date().toISOString();
-    const startedAt = attempt.startedAt ?? submittedAt;
+    const startedAt = at.startedAt ?? submittedAt;
 
     let correct = 0;
     const bySubjectRaw: Record<string, { correct: number; total: number }> = {};
     const wrongIds: string[] = [];
 
-    for (const qid of attempt.questionIds) {
+    for (const qid of at.questionIds) {
       const q = qMap.get(qid);
       if (!q) continue;
 
@@ -90,7 +94,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
       bySubjectRaw[subj] ??= { correct: 0, total: 0 };
       bySubjectRaw[subj].total += 1;
 
-      const ans = attempt.answers[qid];
+      const ans = at.answers[qid];
       const ok = ans !== null && ans === q.answerIndex;
       if (ok) {
         correct += 1;
@@ -100,7 +104,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
       }
     }
 
-    const total = attempt.questionIds.length;
+    const total = at.questionIds.length;
     const bySubject: ExamResult["bySubject"] = {};
     for (const [subj, v] of Object.entries(bySubjectRaw)) {
       const pct = v.total === 0 ? 0 : Math.round((v.correct / v.total) * 100);
@@ -114,20 +118,17 @@ export default function ExamTakePage({ app, setApp }: Props) {
     const durationSec = Math.max(
       0,
       Math.floor(
-        (new Date(submittedAt).getTime() -
-          new Date(startedAt).getTime()) /
-          1000
+        (new Date(submittedAt).getTime() - new Date(startedAt).getTime()) / 1000
       )
     );
 
     const result: ExamResult = {
-      attemptId: attempt.id,
+      attemptId: at.id,
       durationSec,
       total: {
         correct,
         total,
-        scorePercent:
-          total === 0 ? 0 : Math.round((correct / total) * 100),
+        scorePercent: total === 0 ? 0 : Math.round((correct / total) * 100),
       },
       bySubject,
       wrongQuestionIds: wrongIds,
@@ -146,10 +147,10 @@ export default function ExamTakePage({ app, setApp }: Props) {
     });
 
     const nextAttempts = app.attempts.map((a) => {
-      if (a.id !== attempt.id) return a;
+      if (a.id !== at.id) return a;
       return {
         ...a,
-        status: "SUBMITTED",
+        status: submittedStatus,
         startedAt,
         submittedAt,
       };
@@ -157,7 +158,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
 
     const nextResults = [
       result,
-      ...app.results.filter((r) => r.attemptId !== attempt.id),
+      ...app.results.filter((r) => r.attemptId !== at.id),
     ];
 
     setApp({
@@ -167,7 +168,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
       results: nextResults,
     });
 
-    nav(`/result/${attempt.id}`);
+    nav(`/result/${at.id}`);
   }
 
   return (
@@ -175,7 +176,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
       {/* 상단 고정 정보 바 */}
       <div className="card rowBetween">
         <div className="stack">
-          <h2 className="cardTitle">{attempt.title}</h2>
+          <h2 className="cardTitle">{at.title}</h2>
           <div className="muted">
             진행 {answeredCount}/{questionIds.length}
           </div>
@@ -202,7 +203,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
             }}
           >
             {questionIds.map((qid, i) => {
-              const answered = attempt.answers[qid] !== null;
+              const answered = at.answers[qid] !== null;
               const active = i === idx;
               return (
                 <button
@@ -210,9 +211,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
                   className={`btn ${active ? "btnPrimary" : ""}`}
                   style={{
                     padding: 6,
-                    background: answered
-                      ? "rgba(122,167,255,0.25)"
-                      : undefined,
+                    background: answered ? "rgba(122,167,255,0.25)" : undefined,
                   }}
                   onClick={() => setIdx(i)}
                 >
@@ -226,18 +225,16 @@ export default function ExamTakePage({ app, setApp }: Props) {
         {/* 문제 영역 */}
         <div className="card">
           <div className="muted" style={{ fontSize: 12 }}>
-            {idx + 1} / {questionIds.length} · {current.subject} ·
-            난이도 {current.difficulty}
+            {idx + 1} / {questionIds.length} · {cur.subject} · 난이도{" "}
+            {cur.difficulty}
           </div>
 
-          <div style={{ marginTop: 10, fontWeight: 700 }}>
-            {current.prompt}
-          </div>
+          <div style={{ marginTop: 10, fontWeight: 700 }}>{cur.prompt}</div>
 
           <div className="stack" style={{ marginTop: 12 }}>
             {[0, 1, 2, 3].map((displayIdx) => {
               const originalIdx = order[displayIdx];
-              const text = current.choices[originalIdx];
+              const text = cur.choices[originalIdx];
               const checked = selectedOriginal === originalIdx;
 
               return (
@@ -256,11 +253,9 @@ export default function ExamTakePage({ app, setApp }: Props) {
                 >
                   <input
                     type="radio"
-                    name={`q_${current.id}`}
+                    name={`q_${cur.id}`}
                     checked={checked}
-                    onChange={() =>
-                      setAnswer(originalIdx as 0 | 1 | 2 | 3)
-                    }
+                    onChange={() => setAnswer(originalIdx as 0 | 1 | 2 | 3)}
                   />
                   <div>{text}</div>
                 </label>
@@ -280,9 +275,7 @@ export default function ExamTakePage({ app, setApp }: Props) {
               <button
                 className="btn"
                 onClick={() =>
-                  setIdx((v) =>
-                    Math.min(questionIds.length - 1, v + 1)
-                  )
+                  setIdx((v) => Math.min(questionIds.length - 1, v + 1))
                 }
                 disabled={idx === questionIds.length - 1}
               >
